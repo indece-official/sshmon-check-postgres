@@ -40,13 +40,13 @@ Usage of sshmon_check_postgres:
 
 Output:
 ```
-0 Postgres_testdbserver.default - OK - Postgres database 'testdb' on testdbserver.default.svc.cluster.local is up and running
+0 Postgres_testdbserver.default - OK - Postgres database 'testdb' on testdbserver.default.svc.cluster.local (10.15) is up and running
 ```
 
 ### Supported Postgres versions
 | Version | Tested |
 | --- | --- |
-| v7 | Yes |
+| 10.* | Yes |
 
 ## Development
 ### Snapshot build

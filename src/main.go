@@ -88,21 +88,21 @@ func resolveDNS(host string) (string, error) {
 	return aRecord.A.String(), nil
 }
 
-func checkConnection(db *sql.DB) error {
-	value := ""
+func checkConnection(db *sql.DB) (string, error) {
+	version := ""
 
 	err := db.QueryRow(`
-		SELECT 'test' AS value`,
-	).Scan(&value)
+		SHOW server_version`,
+	).Scan(&version)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	if value != "test" {
-		return fmt.Errorf("Postgres is crazy (returned '%s' instead of 'test')", value)
+	if version == "" {
+		return "", fmt.Errorf("Postgres returned an empty version")
 	}
 
-	return nil
+	return version, nil
 }
 
 func checkLocks(db *sql.DB, maxLockAge int) (int, error) {
@@ -235,7 +235,7 @@ func main() {
 	}
 	defer db.Close()
 
-	err = checkConnection(db)
+	serverVersion, err := checkConnection(db)
 	if err != nil {
 		fmt.Printf(
 			"2 %s - %s - Error testing connection on database '%s' on %s:%d: %s\n",
@@ -325,12 +325,13 @@ func main() {
 	}
 
 	fmt.Printf(
-		"0 %s - %s - Postgres database '%s' on %s:%d is up and running\n",
+		"0 %s - %s - Postgres database '%s' on %s:%d (%s) is up and running\n",
 		serviceName,
 		statusMap[0],
 		*flagDatabase,
 		host,
 		*flagPort,
+		serverVersion,
 	)
 
 	os.Exit(0)
