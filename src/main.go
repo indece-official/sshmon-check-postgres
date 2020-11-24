@@ -35,6 +35,7 @@ var (
 	flagHost             = flag.String("host", "", "Host")
 	flagPort             = flag.Int("port", 5432, "Port")
 	flagDatabase         = flag.String("db", "", "Database")
+	flagSSLMode          = flag.String("sslmode", "", "SSL-Mode (disable | require | verify-ca | verify-full)")
 	flagUser             = flag.String("user", "", "User")
 	flagPassword         = flag.String("password", "", "Password")
 	flagPasswordFile     = flag.String("passwordfile", "", "File to read password from")
@@ -207,13 +208,14 @@ func main() {
 	}
 
 	connStr := fmt.Sprintf(
-		"host=%s port=%d dbname=%s user=%s password=%s connect_timeout=%d",
+		"host=%s port=%d dbname=%s user=%s password=%s connect_timeout=%d sslmode=%s",
 		host,
 		*flagPort,
 		*flagDatabase,
 		*flagUser,
 		password,
 		*flagConnTimeout,
+		*flagSSLMode,
 	)
 
 	db, err := sql.Open("postgres", connStr)

@@ -33,6 +33,8 @@ Usage of sshmon_check_postgres:
         Port (default 5432)
   -service string
         Service name (defaults to Elasticsearch_<host>)
+  -sslmode string
+        SSL-Mode (disable | require | verify-ca | verify-full)
   -user string
         User
   -v    Print the version info and exit
